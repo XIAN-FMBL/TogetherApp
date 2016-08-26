@@ -21,6 +21,7 @@
 			var isfirst = $api.getStorage("isfirst");
 			if (isfirst == 'true') {
 				//已经打开过了，直接跳转到home页
+				start_home()
 			} else {
 				//打开欢迎指导页
 				start_welcome()
@@ -31,17 +32,18 @@
 		 */
 		start_welcome = function() {
 			var UIScrollPromptView = api.require('UIScrollPromptView');
+			UIScrollPromptView.clearCache();
 			UIScrollPromptView.open({
 				rect : {
 					x : 0,
 					y : 0,
 					w : api.winWidth,
-					h : api.winHeight / 2
+					h : api.winHeight
 				},
 				data : {
-					paths : ['widget://res/img/apicloud.png', 'widget://res/img/apicloud-gray.png', 'widget://res/img/apicloud.png', 'widget://res/img/apicloud-gray.png'],
-					captions : ['apicloud', 'apicloud', 'apicloud', 'apicloud'],
-					prompts : ['widget://res/img/apicloud.png', 'widget://res/img/apicloud-gray.png', 'widget://res/img/apicloud.png', 'widget://res/img/apicloud-gray.png']
+					paths : ['widget://image/welcome/001.png', 'widget://image/welcome/002.png', 'widget://image/welcome/003.png', 'widget://image/welcome/004.png'],
+					//captions : ['apicloud', 'apicloud', 'apicloud', 'apicloud'],
+					//prompts : ['', '', '', 'widget://image/welcome/btn_welcome.png']
 				},
 				styles : {
 					caption : {
@@ -57,32 +59,64 @@
 						activeColor : '#DA70D6'
 					},
 					prompt : {
-						button : {
-							normal : 'widget://image/btn_normal.png',
-							highlight : 'widget://image/btn_highlight.png',
-							x : 0,
-							y : 100,
-							w : 60,
-							h : 40
-						},
-						x : 0,
-						y : 50,
-						w : 160,
-						h : 90,
-						contentMode : 'scaleToFill',
-						animation : true
+						//						button : {
+						//							normal : 'widget://image/welcome/btn_welcome.png',
+						//							highlight : 'widget://image/welcome/btn_welcome.png',
+						//							x : 10,
+						//							y : 100,
+						//							w : 60,
+						//							h : 60
+						//						},
+						//						x : 10,
+						//						y : 100,
+						//						w : api.winWidth -20 ,
+						//						h : 60,
+						//						contentMode : 'scaleToFill',
+						//						animation : true
 					}
 				},
-				placeholderImg : 'widget://res/slide1.jpg',
+				//				placeholderImg : 'widget://res/slide1.jpg',
 				contentMode : 'scaleToFill',
 				interval : 3,
-				fixedOn : api.frameName,
-				loop : true,
+				//				fixedOn : api.winName,
+				loop : false,
 				fixed : false
 			}, function(ret) {
 				if (ret) {
-					alert(JSON.stringify(ret));
+					//					if (ret.eventType != 'show')
+					//						alert(JSON.stringify(ret));
+					if (ret.eventType != 'show' && ret.index == 3) {
+						start_home()
+					}
 				}
+			});
+		}
+		/**
+		 * 打开主页面
+		 */
+		start_home = function() {
+			api.openSlidLayout({
+				type : 'left',
+				leftEdge : 120,
+				fixedPane : {//滑动的出现的界面
+					name : 'user_side_left_win',
+					url : "html/user_side_left_win.html",
+					bounces : false,
+					scaleEnabled : true
+				},
+				slidPane : {//主页面
+					name : 'home_win',
+					url : "html/home_win.html",
+					bounces : false,
+					scaleEnabled : true
+				},
+				slidPaneStyle : {
+					
+				},
+				fixedPaneStyle : {
+					leftMaskBg : 'rgba(255,255,255,0.5)',
+				}
+			}, function(ret) {
 			});
 		}
 	</script>
