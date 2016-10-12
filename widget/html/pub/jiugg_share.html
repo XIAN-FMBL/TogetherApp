@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<title>title</title>
+		<link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/lib/aui/aui.2.0.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/base.css"/>
+	</head>
+	<style>
+		.img {
+			width: 30%;
+			height: 30%;
+		}
+	</style>
+	<body>
+		<header class="aui-bar aui-bar-nav bar-bgcolor bar-header pf">
+			<a class="aui-pull-left"  tapmode onclick="close_win();"> <span class="aui-iconfont aui-icon-left aui-iconfont-size"></span> </a>
+			<div class="aui-title">
+				九宫格分享界面
+			</div>
+		</header>
+		<div style="margin-top: 85px">
+			<p style="font-size: 0.7rem;padding: 10px;">
+				图片集合分享分享测试多图分享图片集合分享分享测试多图分享图片集合分享分享测试多图分享图片集合分享分享测试多图分享图片集合分享分享测试多图分享https://www.baidu.com
+			</p>
+			<div style="text-align: center;">
+				<img class="img" src="../../image/share/1.jpg">
+				<img  class="img" src="../../image/share/2.jpg">
+				<img  class="img" src="../../image/share/3.jpg">
+				<img  class="img" src="../../image/share/4.jpg">
+				<img  class="img" src="../../image/share/5.jpg">
+				<img  class="img" src="../../image/share/6.jpg">
+				<img  class="img" src="../../image/share/7.jpg">
+				<img  class="img" src="../../image/share/8.jpg">
+				<img  class="img" src="../../image/share/9.jpg">
+			</div>
+			<div>
+				<span onclick="open_share()" style="float: right;margin-right: 10px;font-size: 0.7rem;" >(9)<span style="font-size: 1.0rem;" class="aui-iconfont aui-icon-share aui-iconfont-size"></span></span>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript" src="../../script/api.js"></script>
+	<script type="text/javascript" src="../../script/base.js"></script>
+	<script type="text/javascript" src="../../script/jquery/jquery-1.10.1.min.js"></script>
+	<script type="text/javascript">
+		apiready = function() {
+			$base.setbar_style()
+		}
+		/**
+		 * 开始分享
+		 */
+		open_share = function() {
+			api.showProgress({
+				style : 'default',
+				animationType : 'fade',
+				title : '努力拉取照片中...',
+				text : '请稍等...',
+				modal : true
+			});
+			var val = $('p').text()
+			open_pasteboard(val)
+			saveToAlbums(1,function() {
+				open_wx_share(val)
+				api.hideProgress();
+			})
+		}
+		/**
+		 * 保存照片到系统相册中
+		 */
+		saveToAlbums = function(index,callback) {
+			if(index > 9){
+				if ( typeof callback == 'function') {
+					callback()
+				}
+				return 
+			}		
+			saveToAlbum('widget://image/share/' + index + '.jpg',function(){
+				saveToAlbums(index+1,callback)
+			})		
+		}
+		saveToAlbum = function(path, callback) {
+			api.saveMediaToAlbum({
+				path : path
+			}, function(ret, err) {
+				if (ret && ret.status) {
+					alert('保存成功:' + path);
+				} else {
+					alert('保存失败:' + path);
+				}
+				if ( typeof callback == 'function') {
+					callback(ret && ret.status)
+				}
+			});
+		}
+		/**
+		 * 打开微信分享
+		 */
+		open_wx_share = function(desc) {
+			//			alert(desc)
+			if ('ios' == api.systemType) {
+				api.openApp({
+					iosUrl : 'weixin://', //打开微信的，其中weixin为微信的URL Scheme
+					//					appParam : {
+					//						appParam : 'app参数'
+					//					}
+				});
+			} else {
+				var imgs = []
+				for (var i = 1; i < 10; i++) {
+					imgs.push("widget://image/share/" + i + ".jpg")
+				}
+				var wx = api.require('wx');
+				wx.shareMutableImg({
+					description : desc,
+					imgs : imgs
+				});
+			}
+		}
+		/**
+		 * 打开黏贴板
+		 */
+		open_pasteboard = function(val) {
+			var paste = api.require('pasteboard');
+			var param = {
+				value : val
+			}
+			paste.paste(param, function(ret, err) {
+				if (ret.status) {
+					console.log('复制成功！')
+				}
+			})
+		}
+		/**
+		 * 关闭当前界面
+		 */
+		close_win = function() {
+			$base.close_w()
+		}
+	</script>
+</html>

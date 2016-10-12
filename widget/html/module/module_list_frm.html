@@ -3,23 +3,21 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
 		<title>title</title>
-		<link rel="stylesheet" type="text/css" href="../css/api.css"/>
-		<link rel="stylesheet" type="text/css" href="../css/lib/aui/aui.2.0.css"/>
-		<link rel="stylesheet" type="text/css" href="../css/base.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    	<link rel="stylesheet" type="text/css" href="../../css/lib/aui/aui.2.0.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/base.css"/>
 		<style>
 		</style>
 	</head>
 	<body>
-		<div class="aui-content aui-margin-b-15" style="margin-right: 120px;">
+		<div class="aui-content aui-margin-b-15">
 			<ul class="aui-list aui-list-in">
-				<!--<li class="aui-list-header">
-					带有右侧箭头
-				</li>-->
-				<li class="aui-list-item aui-list-item-middle">
+				<li class="aui-list-item aui-list-item-middle" onclick="open_jiugg_share()">
 					<div class="aui-list-item-inner aui-list-item-arrow">
 						<div class="aui-list-item-title">
-							设置
+							九宫格分享功能
 						</div>
 					</div>
 				</li>
@@ -40,9 +38,17 @@
 			</ul>
 		</div>
 	</body>
-	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../../script/api.js"></script>
+	<script type="text/javascript" src="../../script/base.js"></script>
+	<script type="text/javascript" src="../../script/jquery/jquery-1.10.1.min.js"></script>
 	<script type="text/javascript">
 		apiready = function() {
 		};
+		/**
+		 * 打开九宫格分享界面 
+		 */
+		open_jiugg_share = function(){
+			$base.open_w("../pub/jiugg_share.html")
+		}
 	</script>
 </html>

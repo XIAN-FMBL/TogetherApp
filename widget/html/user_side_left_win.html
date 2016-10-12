@@ -9,23 +9,47 @@
 		<link rel="stylesheet" type="text/css" href="../css/base.css"/>
 	</head>
 	<body>
-		<header class="aui-bar aui-bar-nav bar-bgcolor bar-header" style="padding-top: 75px;">
-			<!--<a class="aui-pull-left"  tapmode onclick="open_side();"> <span class="aui-iconfont aui-icon-menu aui-iconfont-size"></span> </a>-->
-			<div class="aui-title">
-				侧滑页
-			</div>
-			<!--<a class="aui-pull-right"  tapmode onclick="open_user();"> <span class="aui-iconfont aui-icon-people aui-iconfont-size pad-left-10"></span> </a>
-			<a class="aui-pull-right"  tapmode onclick="open_main();"> <span class="aui-iconfont aui-icon-home aui-iconfont-size pad-left-10"></span> </a>-->
+		<header class="bar-bgcolor bar-header" style="height: 115px;padding-top: 45px;padding-bottom: 20px;">
+			<img src="../image/icon/default_face.png" style="width: 60px;height: 60px;float: left;margin-left: 20px;" />
+			<label style="float: left;margin-left: 10px;font-size: 0.7rem;height: 0.6rem;margin-top: 5px;">锋芒毕露</label>
+			<br />
+			<label style="float: left;margin-left: 10px;font-size: 0.7rem;height: 0.6rem;margin-top: 15px;">15330099583</label>
 		</header>
-		<div>测试</div>
-		<div>测试</div>
-		<div>测试</div>
-		<div>测试</div>
-		<div>测试</div>
 	</body>
 	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/base.js"></script>
+	<script type="text/javascript" src="../script/jquery/jquery-1.10.1.min.js"></script>
 	<script type="text/javascript">
 		apiready = function() {
-		};
+			$base.setbar_style()
+			//打开frm
+			open_frm()
+			//设置监听事件
+			bindListener()
+		}
+		/**
+		 * 打开frm 
+		 */
+		open_frm = function(){
+			var headerH = $('header').outerHeight()
+			$base.open_f("user_side_left_frm.html",{},0,headerH,api.winWidth,'auto')
+		}
+		/**
+		 * 绑定监听事件 
+		 */
+		bindListener = function(){
+//			api.addEventListener({
+//	            name:'viewappear'
+//          },function(ret,err){
+//          	//coding...
+//          	alert('打开侧滑栏')
+//          });
+//          api.addEventListener({
+//	            name:'viewdisappear'
+//          },function(ret,err){
+//          	//coding...
+//          	alert('隐藏侧滑栏')
+//          });
+		}
 	</script>
 </html>

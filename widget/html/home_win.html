@@ -3,6 +3,8 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="format-detection" content="telephone=no"/>
 		<title>title</title>
 		<link rel="stylesheet" type="text/css" href="../css/api.css"/>
     	<link rel="stylesheet" type="text/css" href="../css/lib/aui/aui.2.0.css"/>
@@ -19,9 +21,21 @@
 		</header>
 	</body>
 	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/base.js"></script>
+	<script type="text/javascript" src="../script/jquery/jquery-1.10.1.min.js"></script>
 	<script type="text/javascript">
 		apiready = function() {
-		};
+			$base.setbar_style()
+			//打开frm
+			open_frm()	
+		}
+		/**
+		 * 打开frm 
+		 */
+		open_frm = function(){
+			var headerH = $('header').outerHeight()
+			$base.open_f("home_frm.html",{},0,headerH,api.winWidth,'auto')
+		}
 		/**
 		 * 打开侧滑栏 
 		 */

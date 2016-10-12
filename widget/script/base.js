@@ -220,10 +220,16 @@
 	 * @param {Object} param 参数
 	 */
 	b.isEmpty = function(param) {
-		if ( typeof param == 'undefined' || typeof param == undefined || param == 'undefined' || param == undefined || param == null || param == "") {
+		if ( typeof param == 'undefined' || typeof param == undefined || param == 'undefined' || param == undefined || param == null || param == "" || value == "null" || value == "(null)" || value == 'NULL') {
 			return true;
+		}else{
+			param = param + "";
+			param = param.replace(/\s/g, "");
+			if(param == ""){
+				return true
+			}
 		}
-		return false;
+		return false;		
 	}
 	/**
 	 * 获取值
