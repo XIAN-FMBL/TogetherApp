@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+		<title>title</title>
+		<style>
+			.header-img{
+				padding:0;
+				margin:0;
+				width: 100%;
+			}
+			.dynasic_detail {
+				padding: 81px 10px 10px;
+				font-size: 0.9em;
+				color: #666;
+				line-height: 200%;
+			}
+			.dynasic_detail img {
+				width: 100%;
+			}
+			.dynasic_detail p {
+				text-indent: 2em;
+			}
+			.bold {
+				margin: 10px auto 0;
+				font-weight: bold;
+			}
+			.process li {
+				position: relative;
+				padding: 5px 0 5px 1em;
+			}
+			.process li:before {
+				position: absolute;
+				left: 0;
+				top: 6px;
+				font-size: 20px;
+				color: #FF5400;
+				content: "•";
+			}
+		</style>
+	</head>
+	<body>
+		<div class="header-img">
+			<img src="http://img7.98mp.com/temp/ad/201610/2016101009555943.png!640" style="width:100%;height: 15%;">
+		</div>
+		<div class="dynasic_detail">
+			<div class="content">
+				<p>
+					互联网 + 乡村旅游 = 村游，专注乡村旅游细分市场的全国性平台。
+				</p>
+				<p>
+					村游创办于2011年，战略总部设在北京，技术和运营中心设在西安，已在北京、陕西、湖北、湖南、福建、江西、重庆、贵州、云南、四川10个省设立省级运营中心。
+				</p>
+				<p>
+					村游历时5年，深入10多个省，400多个县，过万家商户，探索实践乡村旅游+互联网，实现两部手机打通商户和用户，连接城市和乡村。以乡村旅游+农产品为特色，提出后备箱工程，创立旅游驱动型农村电商模式。围绕商户、用户、政府及上游供应商，以“村游网”为基础，开发了“村游管家”、“村游学院”、“村游＋”，构成四大服务体系。
+				</p>
+				<p>
+					村游独特的商业模式和实战型的团队，得到资本市场青睐，2014年底，获得高德地图创始人成从武先生的鑫澄资本A轮2000万融资。
+				</p>
+				<p>
+					目前，村游已和各省旅游局、扶贫办、商务厅等政府机构建立密切合作，合作收录商户过万家，年交易量过亿元。
+				</p>
+				<div class="bold">
+					村游历程：
+				</div>
+				<ul class="process">
+					<li>
+						2011年，创办村游项目；
+					</li>
+					<li>
+						2012年，成为陕西省旅游局乡村旅游官方网站；
+					</li>
+					<li>
+						2013年，成为湖北省旅游局制定乡村旅游电商网站，多次受邀给各地旅游局、 经营户做培训；
+					</li>
+					<li>
+						2014年，成为重庆市扶贫办战略合作单位；
+						<br />
+						成为国务院扶贫办农村电商试点企业；
+						<br />
+						完成A轮2000万融资，成立西安村游网络技术有限公司；
+					</li>
+					<li>
+						2015年，成为西安市商务厅电商示范企业；
+					</li>
+					<li>
+						2016年，获得陕西省商务厅商业云端黑马奖；
+						<br />
+						当选中国扶贫志愿服务促进会旅游扶贫联盟理事单位。和各地旅游局合作，在全国开展“互联网+乡村旅游”现场培训会100余场。
+					</li>
+				</ul>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript" src="../../script/api.js"></script>
+	<script type="text/javascript" src="../../script/base.js"></script>
+	<script type="text/javascript" src="../../script/jquery/jquery-1.10.1.min.js"></script>
+	<script type="text/javascript">
+		apiready = function() {
+			$base.setbar_style()
+			//打开透明标题栏
+			open_frm()
+			//绑定事件
+			addEvent()
+		};
+		/**
+		 * 打开frm 
+		 */
+		open_frm = function(){
+//			$base.open_f("ui_tranport_header.html",{},0,0,api.winWidth,80)
+			
+			$base.open_layer_f_rect("ui_tranport_header.html",{},{x:0,y:0,w:api.winWidth,h:80},true,'rgba(0,0,0,0)')
+//				b.open_layer_f_rect = function(path, pageParam, rect, reload, bgColor)
+		}
+		/**
+		 * 绑定事件 
+		 */
+		addEvent = function(){
+			$(document).scroll(function() {
+				//alert($(window).scrollTop())
+				var top = $(document).scrollTop()
+//				if(top > 2*80){
+//					return
+//				}
+				var alpha = top/80
+				$base.send_event('transport_header',{
+					alpha:alpha
+				})
+			});
+//			$base.add_evt('transport_header',null,function(param){
+//				
+//			})
+		}
+	</script>
+</html>

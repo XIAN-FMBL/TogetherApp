@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<title>title</title>
+		<link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/lib/aui/aui.2.0.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/base.css"/>
+	</head>
+	<style>
+		html,body{
+			background:rgba(0,0,0,0) !important;
+		}
+		.bar-header{
+			background:rgba(255,255,255,0);
+			color:#0062CC !important;
+		}
+	</style>
+	<body>
+		<header class="aui-bar aui-bar-nav bar-bgcolor bar-header">
+			<a class="aui-pull-left" style="color: #0062CC;"  tapmode onclick="close_win();"> <span style="color: #0062CC;"  class="aui-iconfont aui-icon-left aui-iconfont-size"></span> </a>
+			<div class="aui-title">
+				UI透明标题栏
+			</div>
+		</header>
+	</body>
+	<script type="text/javascript" src="../../script/api.js"></script>
+	<script type="text/javascript" src="../../script/base.js"></script>
+	<script type="text/javascript" src="../../script/jquery/jquery-1.10.1.min.js"></script>
+	<script type="text/javascript">
+		apiready = function() {
+			//绑定事件
+			addEvent()
+		}
+		/**
+		 * 关闭当前界面
+		 */
+		close_win = function() {
+			$base.close_w()
+		}
+		
+		/**
+		 * 绑定事件 
+		 */
+		addEvent = function(){
+			$base.add_evt('transport_header',null,function(param){
+				var alpha = param.alpha
+				$base.show_c('alpha',alpha)
+				$('header').css('background','rgba(255,255,255,'+alpha+')')
+			})
+		}
+	</script>
+</html>

@@ -85,9 +85,9 @@
 				path : path
 			}, function(ret, err) {
 				if (ret && ret.status) {
-					alert('保存成功:' + path);
+					//console.log('保存成功:' + path);
 				} else {
-					alert('保存失败:' + path);
+					//console.log('保存失败:' + path);
 				}
 				if ( typeof callback == 'function') {
 					callback(ret && ret.status)

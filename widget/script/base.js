@@ -12,9 +12,9 @@
 	 * 设置标题栏样式
 	 */
 	b.setbar_style = function(style) {
-		var temp = 'light';
+		var temp = 'dark';
 		if (!b.isEmpty(style)) {
-			temp = 'dark';
+			temp = "light";
 		}
 		api.setStatusBarStyle({
 			style : temp
@@ -35,6 +35,31 @@
 		});
 	}
 	/**
+	 * 设置页面下拉刷新
+	 */
+	b.add_header_refresh_evt = function(callback) {
+		api.setRefreshHeaderInfo({
+			visible : true,
+			loadingImg : 'widget://image/logo2.png',
+			bgColor : '#fff',
+			textColor : '#ccc',
+			textDown : '下拉刷新...',
+			textUp : '松开刷新...',
+			showTime : true
+		}, function(ret, err) {
+			//在这里从服务器加载数据，加载完成后调用api.refreshHeaderLoadDone()方法恢复组件到默认状态
+			if ( typeof callback == 'function') {
+				callback()
+			}
+		});
+	}
+	/**
+	 * 恢复组件到默认状态
+	 */
+	b.refresh_done = function() {
+		api.refreshHeaderLoadDone()
+	}
+	/**
 	 * 列表页分页显示，滑到底事件监听
 	 */
 	b.add_scrollbottom_evt = function(callback) {
@@ -50,6 +75,34 @@
 			if ( typeof callback == 'function') {
 				callback()
 			}
+		});
+	}
+	/**
+	 * 添加监听事件
+	 */
+	b.add_evt = function(evtName, extra, callback) {
+		api.addEventListener({
+			name : evtName
+		}, function(ret, err) {
+			//coding...
+			if (ret && ret.value) {
+				if ( typeof callback == 'function') {
+					callback(ret.value)
+				}
+			} else {
+				if ( typeof callback == 'function') {
+					callback()
+				}
+			}
+		});
+	}
+	/**
+	 * 触发监听事件
+	 */
+	b.send_event = function(evtname, val) {
+		api.sendEvent({
+			name : evtname,
+			extra : val
 		});
 	}
 	/**
@@ -70,7 +123,32 @@
 				y : y == undefined ? 0 : y,
 				w : w == undefined ? api.winWidth : w,
 				h : h == undefined ? 'auto' : h
-			}
+			},
+			softInputMode : 'resize'
+		});
+		return name
+	}
+	/**
+	 * 默认打开页面弹动的frm的方法
+	 * @param {Object} path 文件路径
+	 * @param {Object} y frm显示区域的y坐标
+	 */
+	b.open_f_b = function(path, pageParam, x, y, w, h, reload, showProgress) {
+		var name = b.getFileName(path);
+		api.openFrame({
+			name : name,
+			url : path,
+			reload : reload ? reload : false,
+			showProgress : showProgress ? showProgress : false,
+			pageParam : pageParam,
+			rect : {
+				x : 0,
+				y : y == undefined ? 0 : y,
+				w : w == undefined ? api.winWidth : w,
+				h : h == undefined ? 'auto' : h
+			},
+			softInputMode : 'resize',
+			bounces : true
 		});
 		return name
 	}
@@ -86,7 +164,7 @@
 			name : name,
 			url : path,
 			pageParam : pageParam,
-			bgColor : 'rgba(0, 0, 0, 0.4)',
+			bgColor : 'rgba(0, 0, 0, 0.5)',
 			//animation : animation,
 			rect : {
 				x : 0,
@@ -94,6 +172,49 @@
 				w : api.winWidth,
 				h : 'auto'
 			},
+			reload : $base.isEmpty(reload) ? false : reload,
+			softInputMode : 'resize'
+		});
+	}
+	/**
+	 * 打开半透明弹出层
+	 * @param {Object} path 文件路径
+	 * @param {Object} pageParam 传递参数
+	 * @param {Object} animation 动画类型
+	 */
+	b.open_layer_f_animation = function(path, pageParam, animation, reload) {
+		var name = b.getFileName(path);
+		api.openFrame({
+			name : name,
+			url : path,
+			pageParam : pageParam,
+			bgColor : 'rgba(0, 0, 0, 0.5)',
+			animation : animation,
+			rect : {
+				x : 0,
+				y : 0,
+				w : api.winWidth,
+				h : 'auto'
+			},
+			reload : $base.isEmpty(reload) ? false : reload,
+			softInputMode : 'resize'
+		});
+	}
+	/**
+	 * 打开半透明弹出层
+	 * @param {Object} path 文件路径
+	 * @param {Object} pageParam 传递参数
+	 * @param {Object} animation 动画类型
+	 */
+	b.open_layer_f_rect = function(path, pageParam, rect, reload, bgColor) {
+		var name = b.getFileName(path);
+		api.openFrame({
+			name : name,
+			url : path,
+			pageParam : pageParam,
+			bgColor : b.isEmpty(bgColor) ? 'rgba(0, 0, 0, 0.5)' : bgColor,
+			//animation : animation,
+			rect : rect,
 			reload : $base.isEmpty(reload) ? false : reload
 		});
 	}
@@ -115,6 +236,30 @@
 		});
 	}
 	/**
+	 * 隐藏当前frm
+	 */
+	b.hide_frm = function(frmName,callable) {
+		if(callable){
+			b.send_event('hide_frm')
+		}
+		api.setFrameAttr({
+			name : frmName,
+			hidden : true
+		});
+	}
+	/**
+	 * 显示当前frm 
+	 */
+	b.show_frm = function(frmName,callable) {
+		if(callable){
+			b.send_event('show_frm')
+		}
+		api.setFrameAttr({
+			name : frmName,
+			hidden : false
+		});
+	}
+	/**
 	 * 打开win
 	 * @param {Object} path 文件路径
 	 */
@@ -131,7 +276,8 @@
 			url : path,
 			reload : reload,
 			slidBackEnabled : slidBackEnabled,
-			pageParam : pageParam
+			pageParam : pageParam,
+			softInputMode : 'resize'
 		});
 	}
 	/**
@@ -169,6 +315,30 @@
 			});
 	}
 	/**
+	 * 关闭指定win，如果没有设置name则关闭当前的win
+	 * @param {Object} name 指定的win的name
+	 */
+	b.close_w_delay = function(name, seconds) {
+		setTimeout(function() {
+			if (b.isEmpty(name))
+				api.closeWin({
+				});
+			else
+				api.closeWin({
+					name : name
+				});
+		}, b.isEmpty(seconds) ? 300 : seconds)
+	}
+	/**
+	 * 关闭指定win，如果没有设置name则关闭当前的win
+	 * @param {Object} name 指定的win的name
+	 */
+	b.close_f_delay = function(name, seconds) {
+		setTimeout(function() {
+			b.close_f(name)
+		}, b.isEmpty(seconds) ? 300 : seconds)
+	}
+	/**
 	 * 关闭指定win，关闭前显示对应的提示信息
 	 * @param {Object} name 指定的win的name
 	 * @param {Object} msg 关闭win之前的提示信息
@@ -178,7 +348,7 @@
 		b.show_t(msg, location)
 		setTimeout(function() {
 			b.close_w(name)
-		}, 500)
+		}, 1000)
 	}
 	/**
 	 * 关闭指定frm
@@ -220,16 +390,10 @@
 	 * @param {Object} param 参数
 	 */
 	b.isEmpty = function(param) {
-		if ( typeof param == 'undefined' || typeof param == undefined || param == 'undefined' || param == undefined || param == null || param == "" || value == "null" || value == "(null)" || value == 'NULL') {
+		if ( typeof param == 'undefined' || typeof param == undefined || param == 'undefined' || param == undefined || param == null || param == "") {
 			return true;
-		}else{
-			param = param + "";
-			param = param.replace(/\s/g, "");
-			if(param == ""){
-				return true
-			}
 		}
-		return false;		
+		return false;
 	}
 	/**
 	 * 获取值
@@ -284,14 +448,18 @@
 	 * 如果含有小数就保留两位小数位，小数位全为0的默认是整数不保留小数位
 	 */
 	b.getNumberVal = function(num) {
-		if (isNaN(num)) {
-			$base.show_c("setNumberVal", "非纯数字")
-			return -404
-		}
-		if (b.isfloatNum(num)) {
-			return Number(num).toFixed(2)
-		} else {
-			return Number(num)
+		try {
+			if (isNaN(num)) {
+				$base.show_c("setNumberVal", "非纯数字")
+				return 0
+			}
+			if (b.isfloatNum(num)) {
+				return Number(num).toFixed(2)
+			} else {
+				return Number(num)
+			}
+		} catch(e) {
+			return 0
 		}
 	}
 	/**
@@ -369,6 +537,9 @@
 	 *
 	 */
 	b.show_t = function(msg, location) {
+		if(b.isEmpty(msg)){
+			return
+		}
 		var loc = "bottom";
 		if (!b.isEmpty(location)) {
 			loc = location;
@@ -467,7 +638,11 @@
 	 * @param {Object} tempId 模板框架
 	 */
 	b.getTemplateHtml = function(iframeId, tempId) {
-		var templateHtml = $(window.frames[iframeId].document).find("#" + tempId).text()
+
+		var templateHtml = $("#" + tempId).text()
+		if (!templateHtml) {
+			templateHtml = $(window.frames[iframeId].document).find("#" + tempId).text()
+		}
 		var template = doT.template(templateHtml)
 		return template
 	}
@@ -477,7 +652,10 @@
 	 * @param {Object} tempId 模板框架
 	 */
 	b.getJuicerTemplateHtml = function(iframeId, tempId) {
-		var templateHtml = $(window.frames[iframeId].document).find("#" + tempId).text()
+		var templateHtml = $("#" + tempId).text()
+		if (!templateHtml) {
+			templateHtml = $(window.frames[iframeId].document).find("#" + tempId).text()
+		}
 		return templateHtml
 	}
 	/**
@@ -518,11 +696,22 @@
 	 *
 	 */
 	b.syncImgSrc = function(img, attr, callback) {
-		var url = $(img).attr(attr)
+		var url = $(img).attr(attr).trim()
+		var defurl = $(img).attr("src")
+		if (!url) {
+			if ( typeof callback == 'function') {
+				callback();
+			}
+			return
+		}
 		//b.getPicSize(url)
 		var isIOS = api.systemType == "ios" ? true : false;
 		if (isIOS) {
+			if ($base.isEmpty(url)) {
+				url = defurl
+			}
 			$(img).attr("src", url)
+			$(img).attr("onerror", "this.src='" + defurl + "'")
 			return
 		}
 		//$base.show_c("syncImgSrc url", url);
@@ -531,11 +720,21 @@
 		}, function(ret, err) {
 			if (ret && ret.status) {
 				//b.getPicSize(ret.url)
-				$(img).attr("src", "")
-				$(img).attr("src", ret.url)
-				//$base.show_c("syncImgSrc 缓存本地图片路径", $(img).attr("src"));
+				//				$(img).attr("src", "")
+				if (ret.url) {
+					$(img).attr("src", ret.url)
+				} else {
+					$(img).attr("src", defurl)
+					$(img).attr("onerror", "this.src='" + defurl + "'")
+				}
+			} else {
+				if ($base.isEmpty(url)) {
+					url = defurl
+				}
+				$(img).attr("src", url)
+				$(img).attr("onerror", "this.src='" + defurl + "'")
 			}
-			//$base.show_c("syncImgSrc加载图片...", "ret==" + $base.jsonToStr(ret) + ";err==" + $base.jsonToStr(err));
+			$base.show_c(url, "ret==" + $base.jsonToStr(ret) + ";err==" + $base.jsonToStr(err));
 			if ( typeof callback == 'function') {
 				callback();
 			}
@@ -678,9 +877,12 @@
 		api.imageCache({
 			url : url
 		}, function(ret, err) {
-			var url = ret.url;
+			var cacheUrl = "widget://image/logo.jpg"
+			if (ret && ret.status) {
+				cacheUrl = ret.url;
+			}
 			if ( typeof callback == 'function') {
-				callback(url)
+				callback(cacheUrl)
 			}
 		});
 	}
@@ -779,7 +981,7 @@
 	/**
 	 * 动态导入js文件
 	 */
-	b.reloadAbleJSFn = function(id, newJS,callback) {
+	b.reloadAbleJSFn = function(id, newJS, callback) {
 		var oldjs = null;
 		var t = null;
 		var oldjs = document.getElementById(id);
@@ -801,8 +1003,14 @@
 	/**
 	 * 当前对应的域名
 	 */
-	b.domain = "http://m.cyw.com"
-
+	b.domain = "http://m.cyw.com"//http://m.cyw.so/
+	b.getDomain = function() {
+		if ($api.getStorage('debug') == "true") {
+			return "http://m.98mp.com"
+		} else {
+			return "http://m.cyw.com"
+		}
+	}
 	/*******end********/
 	window.$base = b;
 
