@@ -61,7 +61,7 @@
 			});
 			var val = $('p').text()
 			open_pasteboard(val)
-			saveToAlbums(1,function() {
+			saveToAlbums(1, function() {
 				open_wx_share(val)
 				api.hideProgress();
 			})
@@ -69,16 +69,16 @@
 		/**
 		 * 保存照片到系统相册中
 		 */
-		saveToAlbums = function(index,callback) {
-			if(index > 9){
+		saveToAlbums = function(index, callback) {
+			if (index > 9) {
 				if ( typeof callback == 'function') {
 					callback()
 				}
-				return 
-			}		
-			saveToAlbum('widget://image/share/' + index + '.jpg',function(){
-				saveToAlbums(index+1,callback)
-			})		
+				return
+			}
+			saveToAlbum('widget://image/share/' + index + '.jpg', function() {
+				saveToAlbums(index + 1, callback)
+			})
 		}
 		saveToAlbum = function(path, callback) {
 			api.saveMediaToAlbum({
@@ -122,15 +122,25 @@
 		 * 打开黏贴板
 		 */
 		open_pasteboard = function(val) {
-			var paste = api.require('pasteboard');
-			var param = {
+//			var paste = api.require('pasteboard');
+//			var param = {
+//				value : val
+//			}
+//			paste.paste(param, function(ret, err) {
+//				if (ret.status) {
+//					console.log('复制成功！')
+//				}
+//			})
+			var clipBoard = api.require('clipBoard');
+			clipBoard.set({
 				value : val
-			}
-			paste.paste(param, function(ret, err) {
-				if (ret.status) {
-					console.log('复制成功！')
+			}, function(ret, err) {
+				if (ret) {
+					alert(JSON.stringify(ret));
+				} else {
+					alert(JSON.stringify(err));
 				}
-			})
+			});
 		}
 		/**
 		 * 关闭当前界面
