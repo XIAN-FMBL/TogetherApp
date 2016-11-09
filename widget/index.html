@@ -9,10 +9,14 @@
 	</head>
 	<body></body>
 	<script type="text/javascript" src="./script/api.js"></script>
+	<script type="text/javascript" src="./script/dtouch.js"></script>
 	<script type="text/javascript">
 		apiready = function() {
 			//判断是否需要打开欢迎引导页
 			open_win()
+			//设置3DTouch
+			touch.setItems()
+			touch.setListener()
 		};
 		/**
 		 * 打开下一个界面
